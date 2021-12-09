@@ -4,8 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch.nn as nn
 
-# nn.Transformer()
-
+nn.Transformer
+'''
+cuda
+'''
 # print(torch.cuda.is_available())
 # print(torch.cuda.device_count())
 
