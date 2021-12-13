@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch.nn as nn
 
-nn.Transformer
+
 '''
 cuda
 '''
@@ -30,9 +30,14 @@ cat stack
 '''
 # a = torch.tensor([1, 2, 3])
 # b = torch.tensor([4, 5, 6])
-# print(torch.cat((a, b), 0))       # torch.cat((a, b), 1) error
+# print(torch.cat((a, b), 0))       
+# print(torch.hstack((a, b)))
+# print(torch.vstack((a, b)))
 # print(torch.stack((a, b), 0))
 # print(torch.stack((a, b), 1))
+
+# a = torch.tensor([[1],[2],[3]])
+# b = torch.tensor([[4],[5],[6]])
 # print(torch.hstack((a, b)))
 # print(torch.vstack((a, b)))
 
@@ -44,15 +49,6 @@ cat stack
 # print(torch.stack((x, y), 1))
 # print(torch.hstack((x, y)))
 # print(torch.vstack((x, y)))
-
-# a = torch.tensor([[1],[2],[3]])
-# b = torch.tensor([[4],[5],[6]])
-# torch.hstack((a,b))
-
-# x = torch.rand(1, 2, 3)
-# y = torch.rand(1, 2, 3)
-# z = torch.cat((x, y), 1)
-# print(z.shape)
 
 '''
 expand repeat
