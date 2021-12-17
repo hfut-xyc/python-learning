@@ -14,7 +14,7 @@ DataFrame Series
 '''
 read_csv
 '''
-# df = pd.read_csv("./1-pandas/report.csv", delimiter=";")
+# df = pd.read_csv("./res/report.csv", delimiter=";")
 # df = df.loc[:, ['reportTitle','reporter', 'reportTime', 'reportLocation']]
 
 # with open('report.sql', mode='w', encoding="utf-8") as f:
@@ -27,5 +27,5 @@ read_csv
 '''
 read_json
 '''
-df = pd.read_json('./1-pandas/site.json')
+df = pd.read_json('./res/site.json')
 print(df)

@@ -3,9 +3,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 '''
-threading
+thread mutex
 '''
-
 class Task(threading.Thread):
     def __init__(self, name, lock) -> None:
         super().__init__()

@@ -8,16 +8,6 @@ import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
 
-# S: Symbol that shows starting of decoding input
-# E: Symbol that shows starting of decoding output
-# P: Symbol that will fill in blank sequence if current batch data size is short than time steps
-
-def make_batch(sentences):
-    input_batch = [[src_vocab[n] for n in sentences[0].split()]]
-    output_batch = [[tgt_vocab[n] for n in sentences[1].split()]]
-    target_batch = [[tgt_vocab[n] for n in sentences[2].split()]]
-    return torch.LongTensor(input_batch), torch.LongTensor(output_batch), torch.LongTensor(target_batch)
-
 def get_sinusoid_encoding_table(n_position, d_model):
     def cal_angle(position, hid_idx):
         return position / np.power(10000, 2 * (hid_idx // 2) / d_model)
@@ -173,8 +163,14 @@ def showgraph(attn):
     ax.set_yticklabels(['']+sentences[2].split(), fontdict={'fontsize': 14})
     plt.show()
 
+def make_batch(sentences):
+    input_batch = [[src_vocab[n] for n in sentences[0].split()]]
+    output_batch = [[tgt_vocab[n] for n in sentences[1].split()]]
+    target_batch = [[tgt_vocab[n] for n in sentences[2].split()]]
+    return torch.LongTensor(input_batch), torch.LongTensor(output_batch), torch.LongTensor(target_batch)
+
 if __name__ == '__main__':
-    sentences = ['ich mochte ein bier P', 'S i want a beer', 'i want a beer E']
+    
 
     # Transformer Parameters
     # Padding Should be Zero
@@ -197,7 +193,8 @@ if __name__ == '__main__':
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
-
+    
+    sentences = ['ich mochte ein bier P', 'S i want a beer', 'i want a beer E']
     enc_inputs, dec_inputs, target_batch = make_batch(sentences)
 
     for epoch in range(20):

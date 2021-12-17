@@ -1,10 +1,12 @@
 '''
-syntax
+slice
 '''
 a = [1, 2, 3, 4, 5]
-print(a[:-1]) 
-print(a[::-1]) 
-print(a[3::-1])
+print(a[:-1])       # [1, 2, 3, 4]
+print(a[:5:2])      # [1, 3, 5]
+print(a[::-1])      # [5, 4, 3, 2, 1]
+print(a[3::-1])     # [4, 3, 2, 1]
+print(a[3:0:-1])    # [4, 3, 2]
 
 '''
 list
@@ -35,3 +37,13 @@ Counter
 # c = Counter()
 # c.update(["test", "test", 'me'])
 # print(c.items())
+
+'''
+tqdm
+'''
+from tqdm import tqdm
+import time
+
+for i in tqdm(range(10)):
+    time.sleep(0.5)
+    pass

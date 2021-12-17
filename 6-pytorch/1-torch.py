@@ -1,15 +1,21 @@
 import torch
 
-import numpy as np
-import matplotlib.pyplot as plt
-import torch.nn as nn
-
-
 '''
 cuda
 '''
 # print(torch.cuda.is_available())
 # print(torch.cuda.device_count())
+
+'''
+multiplication
+'''
+x = torch.ones(3, 4)
+y = torch.rand(3, 1)
+print(x * y) # torch.mul(x, y)
+
+x = torch.tensor([[1, 2], [3, 4]])
+y = torch.tensor([[1, 2], [3, 4]])
+print(x * y) # torch.mul(x, y)
 
 '''
 view reshape
