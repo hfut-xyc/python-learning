@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 #     plt.xlim([0,256])
 # plt.show()
 
-img = cv2.imread('dog.jpg', 0)
+img = cv2.imread('./res/test.jpg', 0)
 
 # create a mask
 mask = np.zeros(img.shape[:2], np.uint8)

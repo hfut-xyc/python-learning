@@ -1,4 +1,5 @@
 import torch
+from torch import einsum
 
 '''
 cuda
@@ -7,32 +8,48 @@ cuda
 # print(torch.cuda.device_count())
 
 '''
-multiplication
+einsum
 '''
-x = torch.ones(3, 4)
-y = torch.rand(3, 1)
-print(x * y) # torch.mul(x, y)
-
-x = torch.tensor([[1, 2], [3, 4]])
-y = torch.tensor([[1, 2], [3, 4]])
-print(x * y) # torch.mul(x, y)
+# x = torch.ones(3, 2)
+# y = torch.ones(4, 2) * 2
+# z = einsum('ik, jk -> ij', x, y)
+# print(z)
 
 '''
-view reshape
+chunk
 '''
-x = torch.ones(2, 3)
+x = torch.rand(16, 3, 2)
+x = x.chunk(4, dim=0)           # 4 * [4, 3, 2]
+x = [temp[None] for temp in x]  # 4 * [1, 4, 3, 2]
+x = torch.cat(x, dim=0)
+print(x.shape)  
+x = torch.flatten(x, start_dim=0, end_dim=1) 
+
+
+'''
+view reshape 
+'''
+# x = torch.ones(2, 3)
 # print(x.data_ptr() == x.reshape(1, 6).data_ptr())
 # print(x.data_ptr() == x.transpose(0, 1).reshape(1, 6).data_ptr())
 
-print(x.view(1, 6).is_contiguous())
-print(x.reshape(1, 6).is_contiguous())
-print(x.flatten().is_contiguous())
-
-print(x.transpose(1, 0).is_contiguous())
-print(x.permute(1, 0).is_contiguous())
+# print(x.view(1, 6).is_contiguous())     # True
+# print(x.reshape(1, 6).is_contiguous())  # True
+# print(x.flatten().is_contiguous())      # True
+# print(x.transpose(1, 0).is_contiguous())    # False
+# print(x.permute(1, 0).is_contiguous())      # False
 
 '''
-cat stack
+flatten
+'''
+# x = torch.randn(4, 3, 10, 10)
+# y = torch.flatten(x, start_dim=0, end_dim=1)
+# z = x.view(-1, 10, 10)
+# print(y.shape)
+# print(z.shape)
+
+'''
+cat stack hstack vstack
 '''
 # a = torch.tensor([1, 2, 3])
 # b = torch.tensor([4, 5, 6])
@@ -96,6 +113,7 @@ squeeze unsqueeze
 # print(b)
 # print(c)
 
+
 '''
 math
 '''
@@ -113,3 +131,14 @@ math
 #     [0, 1, 1]
 # ])
 # print(torch.nonzero(x, as_tuple=True))
+
+'''
+multiplication
+'''
+# x = torch.ones(3, 4)
+# y = torch.rand(3, 1)
+# print(x * y) # torch.mul(x, y)
+
+# x = torch.tensor([[1, 2], [3, 4]])
+# y = torch.tensor([[1, 2], [3, 4]])
+# print(x * y) # torch.mul(x, y)
