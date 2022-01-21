@@ -131,9 +131,9 @@ class FSATransformerEncoder(nn.Module):
             sp_attn_x = sp_attn(x) + x      # [B*nt, nh*nw, d] 
 
             # Reshape tensors for temporal attention
-            sp_attn_x = sp_attn_x.chunk(batch, dim=0)       # B * [nt, nh*hw, d]
-            sp_attn_x = [temp[None] for temp in sp_attn_x]  # B * [1, nt, nh*hw, d]
-            sp_attn_x = torch.cat(sp_attn_x, dim=0).transpose(1, 2)     # [B, nh*hw, nt, d]
+            sp_attn_x = sp_attn_x.chunk(batch, dim=0)                       # B * [nt, nh*hw, d]
+            sp_attn_x = [temp[None] for temp in sp_attn_x]                  # B * [1, nt, nh*hw, d]
+            sp_attn_x = torch.cat(sp_attn_x, dim=0).transpose(1, 2)         # [B, nh*hw, nt, d]
             sp_attn_x = torch.flatten(sp_attn_x, start_dim=0, end_dim=1)    # [B*nh*hw, nt, d]
 
             # Temporal attention
@@ -142,8 +142,8 @@ class FSATransformerEncoder(nn.Module):
             x = ff(temp_attn_x) + temp_attn_x  
 
             # Reshape tensor again for spatial attention
-            x = x.chunk(batch, dim=0)
-            x = [temp[None] for temp in x]
+            x = x.chunk(batch, dim=0)                                       # B * [nh*hw, nt, d]
+            x = [temp[None] for temp in x]                                  # B * [1, nh*hw, nt, d]
             x = torch.cat(x, dim=0).transpose(1, 2)
             x = torch.flatten(x, start_dim=0, end_dim=1)
 
@@ -182,15 +182,15 @@ class ViViTBackbone(nn.Module):
                 mode='tubelet', device='cuda', emb_dropout=0., dropout=0., model=3):
         super().__init__()
         assert t % patch_t == 0 and h % patch_h == 0 and w % patch_w == 0, "Video dimensions should be divisible by tubelet size "
-        self.T = t
-        self.H = h
-        self.W = w
+        # self.T = t
+        # self.H = h
+        # self.W = w
         self.pt = patch_t
         self.ph = patch_h
         self.pw = patch_w
-        self.nt = self.T // self.pt
-        self.nh = self.H // self.ph
-        self.nw = self.W // self.pw
+        self.nt = t // self.pt
+        self.nh = h // self.ph
+        self.nw = w // self.pw
         tubelet_dim = self.pt * self.ph * self.pw * 3
 
         self.to_tubelet_embedding = nn.Sequential(

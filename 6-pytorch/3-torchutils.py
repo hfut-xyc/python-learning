@@ -9,6 +9,7 @@ class MyDataset(Dataset):
         self.label = np.ones(20)
 
     def __getitem__(self, index):
+        print(index)
         return self.data[index], self.label[index]
 
     def __len__(self):
@@ -18,9 +19,6 @@ def collate_fn(batch):
     data_tuple, label_tuple = zip(*batch)    
     datas = np.stack(data_tuple, 0)
     labels = np.stack(label_tuple, 0)
-    # print(batch)
-    # print(data_tuple)
-    # print(datas)
     return datas, labels
 
 dataset = MyDataset()
@@ -28,3 +26,8 @@ dataloader = DataLoader(dataset=dataset, batch_size=4, collate_fn=collate_fn)
 
 num_batches = len(dataloader)
 datas, labels = next(iter(dataloader))
+
+# x = torch.tensor([1, 2, 3])
+# y = torch.tensor([4, 5, 6])
+# list = [x, y]
+# print(list)

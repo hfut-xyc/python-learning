@@ -149,8 +149,11 @@ class Transformer(nn.Module):
     
     def forward(self, enc_inputs, dec_inputs):
         enc_outputs, enc_self_attns = self.encoder(enc_inputs)
+
         dec_outputs, dec_self_attns, dec_enc_attns = self.decoder(dec_inputs, enc_inputs, enc_outputs)
-        dec_logits = self.linear(dec_outputs) # dec_logits : [batch_size, src_vocab_size, tgt_vocab_size]
+
+        # dec_logits : [batch_size, src_vocab_size, tgt_vocab_size]
+        dec_logits = self.linear(dec_outputs) 
         return dec_logits.view(-1, dec_logits.size(-1)), enc_self_attns, dec_self_attns, dec_enc_attns
 
 def showgraph(attn):
@@ -170,8 +173,6 @@ def make_batch(sentences):
     return torch.LongTensor(input_batch), torch.LongTensor(output_batch), torch.LongTensor(target_batch)
 
 if __name__ == '__main__':
-    
-
     # Transformer Parameters
     # Padding Should be Zero
     src_vocab = {'P': 0, 'ich': 1, 'mochte': 2, 'ein': 3, 'bier': 4}
