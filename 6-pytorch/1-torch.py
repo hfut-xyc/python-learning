@@ -132,6 +132,10 @@ math
 # ])
 # print(torch.nonzero(x, as_tuple=True))
 
+x = torch.ones(3, 4)
+print(x.mean(dim=0))
+print(x.mean(dim=1))
+
 '''
 multiplication
 '''

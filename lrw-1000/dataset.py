@@ -26,7 +26,7 @@ class LRW1000_Dataset(Dataset):
             lines.extend([line.strip().split(',') for line in f.readlines()])
         
                         
-        self.data_root = 'D:/xyc/LRW1000_Public/images'
+        self.data_root = 'D:/xyc/dataset/LRW1000_Public/images'
         self.padding = 40
         pinyins = sorted(np.unique([line[2] for line in lines]))
 
