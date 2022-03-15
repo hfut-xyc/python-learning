@@ -1,9 +1,9 @@
-import cv2 as cv
+import cv2
 
-backSub = cv.createBackgroundSubtractorMOG2()
+backSub = cv2.createBackgroundSubtractorMOG2()
 # backSub = cv.createBackgroundSubtractorKNN()
 
-capture = cv.VideoCapture('D:/workspace/video/test.mov')
+capture = cv2.VideoCapture('D:/workspace/video/test.mov')
 if not capture.isOpened():
     exit(0)
 
@@ -13,8 +13,8 @@ while True:
         break
 
     fgMask = backSub.apply(frame)
-    cv.imshow('FG Mask', fgMask)
+    cv2.imshow('FG Mask', fgMask)
 
-    keyboard = cv.waitKey(30)
+    keyboard = cv2.waitKey(30)
     if keyboard == 27:
         break

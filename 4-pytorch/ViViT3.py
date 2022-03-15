@@ -53,7 +53,6 @@ class FSAttention(nn.Module):
         out = self.W_o(out) + residual
         return out
 
-
 class FSAEncoder(nn.Module):
     def __init__(self, nt, nh, nw, depth, dim, heads, dim_head, dim_mlp, dropout=0.):
         super().__init__()

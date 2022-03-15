@@ -115,29 +115,39 @@ squeeze unsqueeze
 
 
 '''
-math
+max
 '''
 # x = torch.rand(4, 4)
 # print(x)
 # print(torch.max(x, 0))
 # print(torch.max(x, 1))
 
+'''
+topk
+'''
 # x = torch.rand(4, 4)
 # print(x)
 # print(x.topk(1))
 
+'''
+nonzero
+'''
 # x = torch.tensor([
 #     [1, 1, 0],
 #     [0, 1, 1]
 # ])
 # print(torch.nonzero(x, as_tuple=True))
 
-x = torch.ones(3, 4)
-print(x.mean(dim=0))
-print(x.mean(dim=1))
+'''
+mean
+'''
+# x = torch.ones(3, 4)
+# print(x.mean(dim=0))
+# print(x.mean(dim=1))
+
 
 '''
-multiplication
+multiply
 '''
 # x = torch.ones(3, 4)
 # y = torch.rand(3, 1)

@@ -130,12 +130,13 @@ class Decoder(nn.Module):
         
         pad_mask = get_attn_pad_mask(dec_inputs, dec_inputs)
         subsequent_mask = get_attn_subsequent_mask(dec_inputs)
-        mask = torch.gt((pad_mask + subsequent_mask), 0)
+        self_attn_mask = torch.gt((pad_mask + subsequent_mask), 0)
+        
         dec_enc_attn_mask = get_attn_pad_mask(dec_inputs, enc_inputs)
 
         dec_self_attns, dec_enc_attns = [], []
         for layer in self.layers:
-            dec_outputs, dec_self_attn, dec_enc_attn = layer(dec_outputs, enc_outputs, mask, dec_enc_attn_mask)
+            dec_outputs, dec_self_attn, dec_enc_attn = layer(dec_outputs, enc_outputs, self_attn_mask, dec_enc_attn_mask)
             dec_self_attns.append(dec_self_attn)
             dec_enc_attns.append(dec_enc_attn)
         return dec_outputs, dec_self_attns, dec_enc_attns
