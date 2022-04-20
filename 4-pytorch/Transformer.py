@@ -1,7 +1,7 @@
-# 
 # code by Tae Hwan Jung(Jeff Jung) @graykode, Derek Miller @dmmiller612
 # Reference : https://github.com/jadore801120/attention-is-all-you-need-pytorch
 #           https://github.com/JayParks/transformer
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -22,7 +22,6 @@ def get_sinusoid_encoding_table(n_position, d_model):
 def get_attn_pad_mask(seq_q, seq_k):
     batch_size, len_q = seq_q.size()
     batch_size, len_k = seq_k.size()
-    # eq(zero) is PAD token
     pad_attn_mask = seq_k.data.eq(0).unsqueeze(1)  # batch_size, 1, L, one is masking
     return pad_attn_mask.expand(batch_size, len_q, len_k)  # batch_size, len_q, len_k
 
@@ -49,14 +48,14 @@ class MultiHeadAttention(nn.Module):
         q_s = self.W_Q(Q).view(batch_size, -1, n_heads, d_k).transpose(1, 2)
         k_s = self.W_K(K).view(batch_size, -1, n_heads, d_k).transpose(1, 2)
         v_s = self.W_V(V).view(batch_size, -1, n_heads, d_v).transpose(1, 2)
+        scores = torch.matmul(q_s, k_s.transpose(-1, -2)) / np.sqrt(d_k)
 
         # mask: [batch_size, 1, L, L] -> [batch_size, 8, L, L]
         if mask is not None:
             mask = mask.unsqueeze(1).repeat(1, n_heads, 1, 1) 
-
-        scores = torch.matmul(q_s, k_s.transpose(-1, -2)) / np.sqrt(d_k)
         # Fills elements of self tensor with value where mask is one.
         scores.masked_fill_(mask, -1e9) 
+
         attn = nn.Softmax(dim=-1)(scores)   
         output = torch.matmul(attn, v_s)
         output = output.transpose(1, 2).contiguous().view(batch_size, -1, n_heads * d_v) 
@@ -109,7 +108,8 @@ class Encoder(nn.Module):
         self.pos_emb = nn.Embedding.from_pretrained(get_sinusoid_encoding_table(src_len+1, d_model), freeze=True)
         self.layers = nn.ModuleList([EncoderLayer() for _ in range(n_layers)])
 
-    def forward(self, enc_inputs): # enc_inputs : [batch_size, source_len]
+    def forward(self, enc_inputs): 
+        # enc_inputs : [batch_size, source_len]
         enc_outputs = self.src_emb(enc_inputs) + self.pos_emb(torch.LongTensor([[1,2,3,4,0]]))
         mask = get_attn_pad_mask(enc_inputs, enc_inputs)
         enc_self_attns = []
@@ -136,7 +136,8 @@ class Decoder(nn.Module):
 
         dec_self_attns, dec_enc_attns = [], []
         for layer in self.layers:
-            dec_outputs, dec_self_attn, dec_enc_attn = layer(dec_outputs, enc_outputs, self_attn_mask, dec_enc_attn_mask)
+            dec_outputs, dec_self_attn, dec_enc_attn = layer(
+                dec_outputs, enc_outputs, self_attn_mask, dec_enc_attn_mask)
             dec_self_attns.append(dec_self_attn)
             dec_enc_attns.append(dec_enc_attn)
         return dec_outputs, dec_self_attns, dec_enc_attns
@@ -150,11 +151,8 @@ class Transformer(nn.Module):
     
     def forward(self, enc_inputs, dec_inputs):
         enc_outputs, enc_self_attns = self.encoder(enc_inputs)
-
         dec_outputs, dec_self_attns, dec_enc_attns = self.decoder(dec_inputs, enc_inputs, enc_outputs)
-
-        # dec_logits : [batch_size, src_vocab_size, tgt_vocab_size]
-        dec_logits = self.linear(dec_outputs) 
+        dec_logits = self.linear(dec_outputs)   # [B, tgt_len, tgt_vocab_size]
         return dec_logits.view(-1, dec_logits.size(-1)), enc_self_attns, dec_self_attns, dec_enc_attns
 
 def showgraph(attn):
@@ -168,10 +166,10 @@ def showgraph(attn):
     plt.show()
 
 def make_batch(sentences):
-    input_batch = [[src_vocab[n] for n in sentences[0].split()]]
-    output_batch = [[tgt_vocab[n] for n in sentences[1].split()]]
+    enc_input_batch = [[src_vocab[n] for n in sentences[0].split()]]
+    dec_input_batch = [[tgt_vocab[n] for n in sentences[1].split()]]
     target_batch = [[tgt_vocab[n] for n in sentences[2].split()]]
-    return torch.LongTensor(input_batch), torch.LongTensor(output_batch), torch.LongTensor(target_batch)
+    return torch.LongTensor(enc_input_batch), torch.LongTensor(dec_input_batch), torch.LongTensor(target_batch)
 
 if __name__ == '__main__':
     # Transformer Parameters
