@@ -174,6 +174,7 @@ def make_batch(sentences):
 if __name__ == '__main__':
     # Transformer Parameters
     # Padding Should be Zero
+    
     src_vocab = {'P': 0, 'ich': 1, 'mochte': 2, 'ein': 3, 'bier': 4}
     tgt_vocab = {'P': 0, 'i': 1, 'want': 2, 'a': 3, 'beer': 4, 'S': 5, 'E': 6}
     src_vocab_size = len(src_vocab)    
