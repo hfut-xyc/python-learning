@@ -66,13 +66,13 @@ def test_collections():
         print(k, v)
 
 def test_regex():
+    str = '<img src="http://www.image.com/test.jpg" alt="alt" title="title">'
+    
     # greedy match
-    str = '<img src="http://www.image.com/666.jpg" alt="alt" title="title">'
     match = re.search(r'img src="(.*)"', str)
     print(match.group(0))
 
     # lazy match
-    str = '<img src="http://www.image.com/666.jpg" alt="alt" title="title">'
     match = re.search(r'img src="(.*?)"', str)
     print(match.group(0))
 
@@ -120,3 +120,6 @@ def test_thread():
     thread2 = Task("B", lock)
     thread1.start()
     thread2.start()
+
+if __name__ == '__main__':
+    test_regex()
